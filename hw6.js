@@ -14,8 +14,10 @@ app.set('port', 5654);
 app.get('/',function(req,res,next){
     var context = {};
 
-    // if(req.body['Submit']){
-    // };
+    if(req.body['Submit']){
+        console.log('You pressed the submit button!')
+        console.log(req.body.name)
+    };
     mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
         if(err){
             next(err);
@@ -26,7 +28,7 @@ app.get('/',function(req,res,next){
     });
 });
 
-app.get('/',function(req,res,next){
+app.get('/insert',function(req,res,next){
     var context = {};
     mysql.pool.query("INSERT INTO workouts (`name`) VALUES (?)", [req.query.name], function(err, result){
         if(err){
