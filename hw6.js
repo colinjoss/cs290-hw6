@@ -26,17 +26,16 @@ app.get('/',function(req,res,next){
     });
 });
 
-app.get('/view-database',function(req,res,next){
+app.get('/',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
+    mysql.pool.query("INSERT INTO workouts (`name`) VALUES (?)", [req.query.name], function(err, result){
         if(err){
             next(err);
             return;
-        }
-        context.results = JSON.stringify(rows);
-        res.render('view-database', context);
+        };
+        res.render('hw6',context);
     });
-  });
+});
 
 app.get('/reset-table',function(req,res,next){
     var context = {};
