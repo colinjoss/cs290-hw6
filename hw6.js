@@ -16,19 +16,25 @@ app.get('/',function(req,res,next){
 
     // if(req.body['Submit']){
     // };
-
-    res.render('hw6',context);
+    mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
+        if(err){
+            next(err);
+            return;
+        }
+        context.results = JSON.stringify(rows);
+        res.render('hw6',context);
+    });
 });
 
 app.get('/view-database',function(req,res,next){
     var context = {};
     mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
-    if(err){
-        next(err);
-        return;
-    }
-    context.results = JSON.stringify(rows);
-    res.render('view-database', context);
+        if(err){
+            next(err);
+            return;
+        }
+        context.results = JSON.stringify(rows);
+        res.render('view-database', context);
     });
   });
 
