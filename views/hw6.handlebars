@@ -1,0 +1,47 @@
+<h1>Fitness Tracker:</h1>
+
+<form action='/'>
+    <label for='name'>Name:</label>
+    <input type='text', name='name'>
+
+    <label for='reps'>Reps:</label>
+    <input type='text', name='reps'>
+
+    <label for='weight'>Weight:</label>
+    <input type='text', name='weight'>
+
+    <label for='date'>Date:</label>
+    <input type='text', name='date', placeholder='yyyy-mm-dd'>
+
+    <label for='unit'>Unit:</label>
+    <select id='unit' name='unit'>
+        <option value='lb'>Volvo</option>
+        <option value='kg'>Saab</option>
+    </select>
+
+    <input type='submit', name='submit', value='Submit'>
+</form>
+
+<form method="post">
+  <input type="text" name="sentence" id="sentence">
+  <input type="submit" name="Add Sentence" value="Add Sentence">
+</form>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th># of Reps</th>
+        <th>Weight</th>
+        <th>Date</th>
+        <th>Units</th>
+    </tr>
+    {{#each fitness}}
+        <tr>
+            <td>{{this.name}}</td>
+            <td>{{this.reps}}</td>
+            <td>{{this.weight}}</td>
+            <td>{{this.date}}</td>
+            <td>{{this.unit}}</td>
+        </tr>
+    {{/each}}
+</table>
