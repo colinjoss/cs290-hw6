@@ -13,11 +13,8 @@
     <label for='date'>Date:</label>
     <input type='text', name='date', placeholder='yyyy-mm-dd'>
 
-    <label for='unit'>Unit:</label>
-    <select id='unit' name='unit'>
-        <option value='lb'>lb</option>
-        <option value='kg'>other</option>
-    </select>
+    <label for='unit'>Lbs:</label>
+    <input type='number', name='lbs', max='1', min='0'> 
     </br>
     <input type='submit' name='Submit' value='Submit'>
 </form>
@@ -27,10 +24,10 @@
 <table>
     <tr>
         <th>Name</th>
-        <th># of Reps</th>
+        <th>Reps</th>
         <th>Weight</th>
         <th>Date</th>
-        <th>Units</th>
+        <th>Lbs</th>
     </tr>
     {{#each exercises}}
         <tr>
