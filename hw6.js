@@ -54,28 +54,29 @@ app.post('/',function(req,res){
 
     if(req.body['Edit']){
         var context = {};
-	context.id = req.body.id;        
-	res.render('edit',context);
+	    context.id = req.body.id;        
+	    res.render('edit',context);
+    };
 
     if(req.body['Submit Edit']){
 	var context = {};
 	mysql.pool.query('SELECT * FROM workouts WHERE id=?', [req.body.id], function(err, rows, fields){
+        if(err){
+            next(err);
+            return;
+        };
+        context.row = JSON.stringify(rows);
+
+	    mysql.pool.query("UPDATE workouts SET name=?, reps=?, weight=? date=? lbs=?  WHERE id=? ",
+        [req.body.name || context.row[0].name , req.body.reps || context.row[0].reps,
+		 req.body.weight || context.row[0].weight, req.body.date || context.row[0].date, 
+		 req.body.lbs || context.row[0].lbs],
+        function(err, result){
             if(err){
                 next(err);
                 return;
             };
-            context.row = JSON.stringify(rows);
-
-	    mysql.pool.query("UPDATE workouts SET name=?, reps=?, weight=? date=? lbs=?  WHERE id=? ",
-                [req.body.name || context.row[0].name , req.body.reps || context.row[0].reps,
-		 req.body.weight || context.row[0].weight, req.body.date || context.row[0].date, 
-		 req.body.lbs || context.row[0].lbs],
-                function(err, result){
-                    if(err){
-                        next(err);
-                        return;
-                    };
-                    res.render('hw6',context);
+            res.render('hw6',context);
             });
         });
     };
@@ -84,7 +85,7 @@ app.post('/',function(req,res){
         console.log('Delete');
     };
 
-};
+});
 
 app.get('/insert',function(req,res,next){
     var context = {};
