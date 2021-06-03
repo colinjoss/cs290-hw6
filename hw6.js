@@ -13,24 +13,83 @@ app.set('port', 5654);
 
 app.get('/',function(req,res,next){
     var context = {};
+    context.exercises = [];
 
-    if(req.body['Submit']){
-        console.log('You pressed the submit button!')
-        console.log(req.body.name)
-    };
     mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
         if(err){
             next(err);
             return;
-        }
-        context.results = JSON.stringify(rows);
+        };
+        context.exercises = rows;
         res.render('hw6',context);
     });
 });
 
+app.post('/',function(req,res){
+    var context = {};
+    context.exercises = [];
+
+    if(req.body['Submit']){
+        if(req.body.name == ''){
+	    console.log('No name');
+	}else{
+	    mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)",
+	    [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs], function(err, result){
+                if(err){
+                    next(err);
+                    return;
+                };
+	        mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
+        	    if(err){
+                        next(err);
+            	        return;
+        	    };
+  		    context.exercises = rows;
+        	    context.results = JSON.stringify(rows);
+        	    res.render('hw6',context);
+    	        });
+    	    });    
+        };
+    };
+
+    if(req.body['Edit']){
+        var context = {};
+	context.id = req.body.id;        
+	res.render('edit',context);
+
+    if(req.body['Submit Edit']){
+	var context = {};
+	mysql.pool.query('SELECT * FROM workouts WHERE id=?', [req.body.id], function(err, rows, fields){
+            if(err){
+                next(err);
+                return;
+            };
+            context.row = JSON.stringify(rows);
+
+	    mysql.pool.query("UPDATE workouts SET name=?, reps=?, weight=? date=? lbs=?  WHERE id=? ",
+                [req.body.name || context.row[0].name , req.body.reps || context.row[0].reps,
+		 req.body.weight || context.row[0].weight, req.body.date || context.row[0].date, 
+		 req.body.lbs || context.row[0].lbs],
+                function(err, result){
+                    if(err){
+                        next(err);
+                        return;
+                    };
+                    res.render('hw6',context);
+            });
+        });
+    };
+
+    if(req.body['Delete']){
+        console.log('Delete');
+    };
+
+};
+
 app.get('/insert',function(req,res,next){
     var context = {};
-    mysql.pool.query("INSERT INTO workouts (`name`) VALUES (?)", [req.query.name], function(err, result){
+    mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)",
+                     [req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs], function(err, result){
         if(err){
             next(err);
             return;

@@ -1,6 +1,6 @@
 <h1>Fitness Tracker:</h1>
 
-<form action='/'>
+<form method='post'>
     <label for='name'>Name:</label>
     <input type='text', name='name'>
 
@@ -19,7 +19,7 @@
         <option value='kg'>other</option>
     </select>
     </br>
-    <input type='submit', name='Submit', value='Submit'>
+    <input type='submit' name='Submit' value='Submit'>
 </form>
 
 </br>
@@ -32,13 +32,21 @@
         <th>Date</th>
         <th>Units</th>
     </tr>
-    {{#each fitness}}
+    {{#each exercises}}
         <tr>
             <td>{{this.name}}</td>
             <td>{{this.reps}}</td>
             <td>{{this.weight}}</td>
             <td>{{this.date}}</td>
-            <td>{{this.unit}}</td>
+            <td>{{this.lbs}}</td>
+            <td><form method='post'>
+		<input type="hidden" name="id" value="{{this.id}}">
+		<input type='submit' name='Edit' value='Edit'>
+	    </form></td>
+            <td><form method='post'>
+	        <input type="hidden" name="id" value="{{this.id}}">
+		<input type='submit' name='Delete' value='Delete'>
+	    </form></td>
         </tr>
     {{/each}}
 </table>
