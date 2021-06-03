@@ -11,10 +11,8 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', 5654);
 
-app.get('/',function(req,res,next){
-    var context = {};
-    context.exercises = [];
 
+function displayTable(context){
     mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
         if(err){
             next(err);
@@ -23,6 +21,13 @@ app.get('/',function(req,res,next){
         context.exercises = rows;
         res.render('hw6',context);
     });
+};
+
+app.get('/',function(req,res,next){
+    var context = {};
+    context.exercises = [];
+
+    displayTable(context)
 });
 
 app.post('/',function(req,res,next){
