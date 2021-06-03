@@ -12,14 +12,14 @@ app.set('view engine', 'handlebars');
 app.set('port', 5654);
 
 
-function displayTable(context){
+function displayTable(res, context){
     mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
         if(err){
             next(err);
             return;
         };
         context.exercises = rows;
-        res.render('hw6',context);
+        res.render('hw6', context);
     });
 };
 
@@ -27,101 +27,69 @@ app.get('/',function(req,res,next){
     var context = {};
     context.exercises = [];
 
-    displayTable(context)
+    displayTable(res, context)
 });
 
 app.post('/',function(req,res,next){
     var context = {};
     context.exercises = [];
 
+    // SUBMIT NEW ROW
     if(req.body['Submit']){
         if(req.body.name == ''){
-	    console.log('No name');
-	}else{
-		console.log(req.body.lbs);
-	    mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)",
-	    [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs], function(err, result){
-                if(err){
-                    next(err);
-                    return;
-                };
-	        mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
-        	    if(err){
-                        next(err);
-            	        return;
-        	    };
-  		    context.exercises = rows;
-        	    context.results = JSON.stringify(rows);
-        	    res.render('hw6',context);
-    	        });
-    	    });    
+	        console.log('No name');
+            return;
         };
+
+	    mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)",  
+        [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs], function(err, result){
+            if(err){
+                next(err);
+                return;
+            };
+        });   
+        displayTable(res, context);
     };
 
+    // EDIT ROW
     if(req.body['Edit']){
         var context = {};
 	    context.id = req.body.id;     
 	    res.render('edit',context);
     };
 
+    // SUBMIT NEW EDIT
     if(req.body['Submit Edit']){
-	var context = {};
-	mysql.pool.query('SELECT * FROM workouts WHERE id=? ', [req.body.id], function(err, rows, fields){
+	    var context = {};
+	    mysql.pool.query('SELECT * FROM workouts WHERE id=? ', [req.body.id], function(err, rows, fields){
             if(err){
                 next(err);
                 return;
             };
             context.row = rows;
-	    mysql.pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, lbs=? WHERE id=? ",
+	        mysql.pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, lbs=? WHERE id=? ",
             [req.body.name || context.row[0].name, req.body.reps || context.row[0].reps, req.body.weight || context.row[0].weight, 
-	    req.body.date || context.row[0].date, req.body.lbs || context.row[0].lbs, context.row[0].id], function(err, res){
-	        if(err){
+	        req.body.date || context.row[0].date, req.body.lbs || context.row[0].lbs, context.row[0].id], function(err, res){
+	            if(err){
                     next(err);
                     return;
                 };
             });
         });
-	
-	mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
-            if(err){
-                next(err);
-                return;
-            };
-            context.exercises = rows
-	    res.render('hw6',context);
-        });	
+        displayTable(res, context);
     };
 
+    // DELETE ROW
     if(req.body['Delete']){
         var context = {};
-	mysql.pool.query('DELETE FROM workouts WHERE id=? ', [req.body.id], function(err, res){
-	    if(err){
-	        next(err);
-		return;
-	    };    
-	});
-
-        mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
-            if(err){
-                next(err);
-                return;
-            };
-            context.exercises = rows;
-            res.render('hw6',context);
-        });
+	    mysql.pool.query('DELETE FROM workouts WHERE id=? ', [req.body.id], function(err, res){
+	        if(err){
+	            next(err);
+		        return;
+	        };    
+	    });
+        displayTable(res, context);
     };
-});
-
-app.get('/insert',function(req,res,next){
-    var context = {};
-    mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)",
-                     [req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs], function(err, result){
-        if(err){
-            next(err);
-            return;
-        };
-        res.render('hw6',context);
-    });
 });
 
 app.get('/reset-table',function(req,res,next){
