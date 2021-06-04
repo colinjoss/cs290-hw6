@@ -39,29 +39,13 @@ app.post('/',function(req,res,next){
 	        console.log('No name');
             return;
         };
-
-        var req = new XMLHttpRequest();
-        req.open('POST', `http://flip3.engr.oregonstate.edu:5654/name=${req.body.name}&reps=${req.body.reps}&weight=${req.body.weight}&date=${req.body.date}&lbs=${req.body.lbs}`, true);
-        req.setRequestHeader('Content-Type', 'application/json');
-        req.addEventListener('load', function(){  // Listener that waits for the request to complete
-            if(req.status >= 200 && req.status < 400){
-                console.log(JSON.parse(req.responseText).data)
-            }else{
-                console.log("Error in network request: " + req.statusText);
-            }
+	    mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)",  
+        [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs], function(err, result){
+            if(err){
+                next(err);
+                return;
+            };
         });
-        req.send(null);
-        event.preventDefault();
-
-
-	    // mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)",  
-        // [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs], function(err, result){
-        //     if(err){
-        //         next(err);
-        //         return;
-        //     };
-        // });   
-
         displayTable(res, context);
     };
 
@@ -90,7 +74,7 @@ app.post('/',function(req,res,next){
                 };
             });
         });
-        displayTable(res, context);
+        setTimeout(displayTable(res, context), 1000);
     };
 
     // DELETE ROW
