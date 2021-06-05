@@ -1,41 +1,43 @@
-<h1>Fitness Tracker:</h1>
+<h1 style='text-align: center'>Fitness Tracker</h1>
 
-<form method='post'>
-    <label for='name'>Name:</label>
-    <input type='text', name='name'>
+<p>Please input an exercise below:</p>
 
-    <label for='reps'>Reps:</label>
-    <input type='text', name='reps'>
-
-    <label for='weight'>Weight:</label>
-    <input type='text', name='weight'>
+<form method='post' style='margin: 5%'>
+    <label for='name' style='padding-right: 8px'>Name:</label>
+    <input type='text', name='name' placeholder='Bench Press'>
     </br>
-    <label for='date'>Date:</label>
+    <label for='reps' style='padding-right: 15px'>Reps:</label>
+    <input type='text', name='reps' placeholder='30'>
+    </br>
+    <label for='weight' style='padding-right: 2px'>Weight:</label>
+    <input type='text', name='weight' placeholder='100'>
+    </br>
+    <label for='date' style='padding-right: 17px'>Date:</label>
     <input type='text', name='date', placeholder='yyyy-mm-dd'>
-
-    <label for='unit'>Lbs:</label>
-    <input type='number', name='lbs', max='1', min='0'> 
+    </br>
+    <label for='unit' style='padding-right: 23px'>Lbs:</label>
+    <input type='number', name='lbs', max='1', min='0' placeholder='1'> 
     </br>
     <input type='submit' name='Submit' value='Submit'>
 </form>
 
 </br>
 </br>
-<table>
+<table style='text-align: left; border: 1px solid black'>
     <tr>
-        <th>Name</th>
-        <th>Reps</th>
-        <th>Weight</th>
-        <th>Date</th>
-        <th>Lbs</th>
+        <th style="padding: 5px">Name</th>
+        <th style="padding: 5px">Reps</th>
+        <th style="padding: 5px">Weight</th>
+        <th style="padding: 5px">Date</th>
+        <th style="padding: 5px">Lbs</th>
     </tr>
     {{#each exercises}}
         <tr>
-            <td>{{this.name}}</td>
-            <td>{{this.reps}}</td>
-            <td>{{this.weight}}</td>
-            <td>{{this.date}}</td>
-            <td>{{this.lbs}}</td>
+            <td style='padding: 5px; background-color: pink'>{{this.name}}</td>
+            <td style='padding: 5px; background-color: lightblue'>{{this.reps}}</td>
+            <td style='padding: 5px; background-color: pink'>{{this.weight}}</td>
+            <td style='padding: 5px; background-color: lightblue'>{{this.date}}</td>
+            <td style='padding: 5px; background-color: pink'>{{this.lbs}}</td>
             <td><form method='post'>
 		<input type="hidden" name="id" value="{{this.id}}">
 		<input type='submit' name='Edit' value='Edit'>

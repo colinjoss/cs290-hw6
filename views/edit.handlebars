@@ -1,17 +1,23 @@
 <h1>Edit entry</h1>
-<p>{{id}}</p>
+
+<p>Please edit your entry below. Leave the input blank to change nothing.</p>
+
 <form method='post'>
-	<label for='name'>Name</label>
+	<label for='name' style='padding-right: 8px'>Name: </label>
 	<input type='text' name='name'>
-	<label for='weight'>Weight</label>
+        </br>
+        <label for='reps' style='padding-right: 15px'>Reps: </label>
+        <input type='text' name='reps'>
+        </br>
+	<label for='weight' style='padding-right: 2px'>Weight: </label>
 	<input type='text' name='weight'>
-	<label for='reps'>Reps</label>
-	<input type='text' name='reps'>
-	</br>
-	<label for='date'>Date</label>
+        </br>
+	<label for='date' style='padding-right: 17px'>Date: </label>
 	<input type='text' name='date'>
-	<label for='lbs'>Lbs</label>
+        </br>
+	<label for='lbs' style='padding-right: 23px'>Lbs: </label>
 	<input type='number' name='lbs' max='1' min='0'>
+        </br>
 	<input type='hidden' name='id' value='{{id}}'>
 	<input type='submit' name='Submit Edit' value='Submit Edit'>
 </form>

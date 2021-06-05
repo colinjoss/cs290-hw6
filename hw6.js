@@ -46,7 +46,7 @@ app.post('/',function(req,res,next){
                 return;
             };
         });
-        displayTable(res, context);
+        setTimeout(function(){displayTable(res, context)}, 250)
     };
 
     // EDIT ROW
@@ -86,7 +86,7 @@ app.post('/',function(req,res,next){
 		        return;
 	        };    
 	    });
-        displayTable(res, context);
+        setTimeout(function(){displayTable(res, context)}, 250)
     };
 });
 
@@ -102,7 +102,7 @@ app.get('/reset-table',function(req,res,next){
         "lbs BOOLEAN)";
         mysql.pool.query(createString, function(err){
         context.results = "Table reset";
-        res.render('home',context);
+        res.render('hw6',context);
         })
     });
 });
