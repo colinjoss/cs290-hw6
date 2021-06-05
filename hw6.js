@@ -74,7 +74,7 @@ app.post('/',function(req,res,next){
                 };
             });
         });
-        setTimeout(displayTable(res, context), 1000);
+	setTimeout(function(){displayTable(res, context)}, 250)
     };
 
     // DELETE ROW
